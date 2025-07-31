@@ -1,0 +1,29 @@
+{
+  "name": "game-rule-assistant",
+  "version": "1.0.0",
+  "description": "Game-rule assistant.",
+  "main": "core/index.js",
+  "scripts": {
+    "ingest": "npx tsx core/ingestion/ingest.mts --documents-folder=local_data/docs -c 6",
+    "ingest-with-open-ai": "npx tsx core/ingestion/ingest.mts --documents-folder=local_data/docs -c 6 --openai",
+    "chat": "npx tsx core/index.mts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@langchain/community": "^0.3.49",
+    "@langchain/core": "^0.3.66",
+    "@langchain/groq": "^0.2.3",
+    "@langchain/langgraph": "^0.4.0",
+    "@langchain/openai": "^0.6.3",
+    "@langchain/textsplitters": "^0.1.0",
+    "langchain": "^0.3.30",
+    "chromadb": ">=1.8.0 <1.9.0",
+    "node-fetch": "^3.3.2",
+    "pdf-parse": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.1.0",
+    "dotenv": "^17.2.1"
+  }
+}
