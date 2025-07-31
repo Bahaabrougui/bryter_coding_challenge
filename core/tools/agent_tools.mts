@@ -18,7 +18,7 @@ export async function getAgentTools(): Promise<DynamicTool[]> {
         const time = performance.now();
         console.log("📑 Retrieving relevant docs..")
         const docs = await base_retriever.invoke(query);
-        console.log(`✅ Docs retrieved. Took me ${(performance.now() - time) / 1000} seconds !`)
+        console.log(`✅ Docs retrieved. Took me ${parseFloat(((performance.now() - time) / 1000).toFixed(3))} seconds !`)
         return docs.map((d: { pageContent: any }) => d.pageContent).join('\n\n');
       },
     }),
