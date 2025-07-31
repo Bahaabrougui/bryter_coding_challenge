@@ -6,16 +6,10 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - chroma-data:/chroma/chroma
+      - chroma-data:/data/chroma
     environment:
       - IS_PERSISTENT=TRUE
 
-  redis:
-    image: redis:alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - reddis-data:/data/reddis
   tei:
     # CPU build
     image: ghcr.io/huggingface/text-embeddings-inference:cpu-1.7
@@ -40,5 +34,4 @@ services:
 
 volumes:
   chroma-data:
-  reddis-data:
   tei-cache:

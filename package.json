@@ -6,7 +6,7 @@
   "scripts": {
     "ingest": "npx tsx core/ingestion/ingest.mts --documents-folder=local_data/docs -c 6",
     "ingest-with-open-ai": "npx tsx core/ingestion/ingest.mts --documents-folder=local_data/docs -c 6 --openai",
-    "chat": "npx tsx core/index.mts"
+    "chat": "npx tsx core/chat.mts"
   },
   "author": "",
   "license": "ISC",
@@ -17,7 +17,6 @@
     "@langchain/langgraph": "^0.4.0",
     "@langchain/openai": "^0.6.3",
     "@langchain/textsplitters": "^0.1.0",
-    "langchain": "^0.3.30",
     "chromadb": ">=1.8.0 <1.9.0",
     "node-fetch": "^3.3.2",
     "pdf-parse": "^1.1.1"

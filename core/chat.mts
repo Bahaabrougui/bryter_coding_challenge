@@ -14,13 +14,25 @@ import {getAgentTools} from './tools/agent_tools.mjs';
 import {CHAT_MODEL, GROQ_API_KEY} from "./config/define.mjs";
 
 
+/**
+ * CLI tool for live chat with a game assistant chatbot.
+ *
+ * Usage:
+ *    npx tsx chat.mts
+ */
+
+// Init console input
 const readLine = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
+// Prompt the user for their username before the session begins to mimic login,
+// to be used for chat history persistence
+const username = await readLine.question('👨‍💻Enter your username:  ');
+const threadId = `thread:${username}`;
 
+// Initialize agent model, tools, and graph state
 const agentTools = await getAgentTools();
-
 const agentModel = new ChatGroq({
     apiKey: GROQ_API_KEY,
     model: CHAT_MODEL,
@@ -38,13 +50,13 @@ const StateAnnotation = Annotation.Root({
         default: () => [],
     }),
 });
-
 const graphBuilder = new StateGraph(StateAnnotation);
 
-const invokeAndPrint = async (state: typeof StateAnnotation.State) => {
+// Graph invocation fnc
+const invokeChat = async (state: typeof StateAnnotation.State) => {
     const response = await agent.invoke(
         {messages: state.messages},
-        {configurable: {thread_id: 'user_123'}} // per-user thread
+        {configurable: {thread_id: threadId}} // per-user thread
     );
 
     const reply = response.messages.at(-1)?.content;
@@ -56,7 +68,7 @@ const invokeAndPrint = async (state: typeof StateAnnotation.State) => {
 };
 
 const graph = graphBuilder
-    .addNode('chat', invokeAndPrint)
+    .addNode('chat', invokeChat)
     .addEdge('__start__', 'chat')
     .addEdge('chat', '__end__')
     .compile();
@@ -65,6 +77,9 @@ const graph = graphBuilder
 let messages: BaseMessage[] = [
   new SystemMessage('You are a helpful game assistant.'),
 ];
+
+console.log(`🔗 Chat session started for user: ${username}`);
+console.log(`Type "exit" to end.\n`);
 
 while (true) {
   const input = await readLine.question('👤 You: ');

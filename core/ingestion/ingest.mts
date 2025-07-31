@@ -9,7 +9,7 @@ import {OpenAIEmbeddings} from "@langchain/openai";
 
 import {
     CHROMA_COLLECTION,
-    CHROMA_URL,
+    CHROMA_URL, CHUNK_OVERLAP, CHUNK_SIZE, EMBEDDING_MODEL,
     OPENAI_API_KEY,
     TEI_URL
 } from '../config/define.mjs'
@@ -19,7 +19,21 @@ import {getChromaStoreSingleton} from "../vector_db/chroma_store.mjs";
 import {requireEnv} from "../utils/utility.mjs";
 
 
-// Ingestion function
+/**
+ * Script for ingesting PDF documents into Chroma vector store.
+ * Supports both OpenAI and TEI embeddings.
+ *
+ * Usage:
+ *    npx tsx ingest.mts --documents-folder ./docs --concurrency 2 [--openai]
+ */
+
+
+/**
+     * Embeds a single query string.
+     * @param vectorstore - The chroma vectorstore object.
+     * @param docsFolderPath - The folder contains the PDFs.
+     * @param concurrency - Number of PDFs to process in //.
+     */
 async function ingest_docs_from_folder(
     vectorstore: Chroma,
     docsFolderPath: string,
@@ -41,8 +55,8 @@ async function ingest_docs_from_folder(
 
     // Init splitter
     const splitter = new RecursiveCharacterTextSplitter({
-        chunkSize: 800,
-        chunkOverlap: 160,
+        chunkSize: CHUNK_SIZE,
+        chunkOverlap: CHUNK_OVERLAP,
     });
     console.log(
         `Adding ${pdfs.length} PDFs from \`${docsFolderPath}\` ..`
@@ -102,6 +116,7 @@ if (values['openai']) {
         baseUrl: TEI_URL,
         batchSize: 16,
         timeoutMs: 90_000,
+        verbose: true,
     });
 }
 // Init DB object
@@ -111,7 +126,7 @@ const vectorstore = await getChromaStoreSingleton({
     embeddings: embeddings,
     metadata: {
         created_by: "ingest",
-        embedding_model: process.env.EMBEDDING_MODEL,
+        embedding_model: EMBEDDING_MODEL,
     }
 });
 const docsFolderPath = path.resolve(docsFolder);
