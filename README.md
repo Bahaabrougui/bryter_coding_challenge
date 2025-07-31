@@ -118,6 +118,15 @@ and is not exposed through an API or UI.
 and not stored per user or across sessions.
 
 
+## Final notes:
+To achieve the lowest possible latency, the ingestion cloud function, vector database, 
+and embedding server should be deployed in the same cloud region, ideally within 
+the same availability zone. Utilizing the cloud provider’s internal backbone 
+network ensures both speed and security. If the chatbot is exposed as an API , 
+it should also be deployed as close as possible to the other components. 
+For further latency optimization, all services can be co-located in the same 
+physical data center, if supported by the cloud provider.
+
 ## Example chat:
 ```
 👤 You: Hi

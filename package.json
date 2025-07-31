@@ -2,7 +2,7 @@
   "name": "game-rule-assistant",
   "version": "1.0.0",
   "description": "Game-rule assistant.",
-  "main": "core/index.js",
+  "main": "core/chat.mts",
   "scripts": {
     "ingest": "npx tsx core/ingestion/ingest.mts --documents-folder=local_data/docs -c 6",
     "ingest-with-open-ai": "npx tsx core/ingestion/ingest.mts --documents-folder=local_data/docs -c 6 --openai",
