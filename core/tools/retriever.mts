@@ -23,9 +23,15 @@ if (OPENAI_API_KEY) {
         baseUrl: TEI_URL,
         batchSize: 16,
         timeoutMs: 90_000,
+        verbose: false,
     });
 }
 
+
+/**
+     * Returns retriever.
+     * @return Promise<BaseRetriever> - A promise resolving to a BaseRetriever oject.
+     */
 export async function getRetriever(): Promise<BaseRetriever> {
 
   const vectorstore = await getChromaStoreSingleton({
