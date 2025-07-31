@@ -3,6 +3,10 @@ import { DynamicTool } from '@langchain/core/tools';
 import { getRetriever } from './retriever.mjs';
 
 
+/**
+     * Returns usable agent tools.
+     * @return Promise<DynamicTool> - A promise resolving to an array of dynamic agent tools.
+     */
 export async function getAgentTools(): Promise<DynamicTool[]> {
   const base_retriever = await getRetriever();
 
