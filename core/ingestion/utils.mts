@@ -46,8 +46,6 @@ export async function processPdf(
   docs.forEach((d, i) => {
     d.metadata.source = file;
     d.metadata.index = i;
-    // Unused locally for this demo as we're not changing contents of PDFs
-    // d.metadata.file_hash = await hashFileContent(filePath);
   });
   const ids = docs.map((d) => hashId(String(d.metadata.source), d.pageContent));
 
