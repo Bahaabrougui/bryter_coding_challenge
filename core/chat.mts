@@ -1,5 +1,8 @@
 import 'dotenv/config';
 import * as readline from 'readline/promises';
+import * as promises from 'fs/promises';
+import * as yaml from 'yaml'
+import { dirname, resolve } from 'path';
 
 import {ChatGroq} from '@langchain/groq';
 import {createReactAgent} from '@langchain/langgraph/prebuilt';
@@ -11,7 +14,12 @@ import {
 } from '@langchain/core/messages';
 
 import {getAgentTools} from './tools/agent_tools.mjs';
-import {CHAT_MODEL, GROQ_API_KEY} from "./config/define.mjs";
+import {
+    CHAT_MODEL,
+    CHAT_SYSTEM_PROMPT_VERSION,
+    GROQ_API_KEY
+} from "./config/define.mjs";
+import {fileURLToPath} from "url";
 
 
 /**
@@ -73,9 +81,16 @@ const graph = graphBuilder
     .addEdge('chat', '__end__')
     .compile();
 
+// Ingest system prompt
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const promptConfig = yaml.parse(await promises.readFile(
+    resolve(__dirname, 'config/prompts.yaml'),
+    'utf8'
+));
 // Start cli chat
 let messages: BaseMessage[] = [
-  new SystemMessage('You are a helpful game assistant.'),
+  new SystemMessage(promptConfig.chatbot.game_assistant.system[CHAT_SYSTEM_PROMPT_VERSION]),
 ];
 
 console.log(`🔗 Chat session started for user: ${username}`);

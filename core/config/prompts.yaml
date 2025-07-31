@@ -1,0 +1,4 @@
+chatbot:
+  game_assistant:
+    system:
+      v1: 'You are a helpful game assistant.'
