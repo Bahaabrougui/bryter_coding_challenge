@@ -89,21 +89,25 @@ const promptConfig = yaml.parse(await promises.readFile(
     'utf8'
 ));
 // Start cli chat
-let messages: BaseMessage[] = [
-  new SystemMessage(promptConfig.chatbot.game_assistant.system[CHAT_SYSTEM_PROMPT_VERSION]),
-];
+const systemMessage: BaseMessage = new SystemMessage(
+    promptConfig.chatbot.game_assistant.system[CHAT_SYSTEM_PROMPT_VERSION]
+);
 
 console.log(`🔗 Chat session started for user: ${username}`);
 console.log(`Type "exit" to end.\n`);
+
+// To inject system prompt at first
+let isFirstTurn = true;
 
 while (true) {
   const input = await readLine.question('👤 You: ');
   if (input.trim().toLowerCase() === 'exit') break;
 
-  messages.push(new HumanMessage(input));
+  const messages = isFirstTurn ? [systemMessage, new HumanMessage(input)] : [new HumanMessage(input)];
 
-  const result = await graph.invoke({ messages });
-  messages = result.messages;
+  const result = await graph.invoke({
+      messages
+  });
 }
 
 console.log('👋 Session ended.');
