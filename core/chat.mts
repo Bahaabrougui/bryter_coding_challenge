@@ -108,6 +108,7 @@ while (true) {
   const result = await graph.invoke({
       messages
   });
+  isFirstTurn = false
 }
 
 console.log('👋 Session ended.');
