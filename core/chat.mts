@@ -105,10 +105,11 @@ while (true) {
 
   const messages = isFirstTurn ? [systemMessage, new HumanMessage(input)] : [new HumanMessage(input)];
 
-  const result = await graph.invoke({
+  await graph.invoke({
       messages
   });
-  isFirstTurn = false
+
+  if (isFirstTurn) isFirstTurn = false;
 }
 
 console.log('👋 Session ended.');
